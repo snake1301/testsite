@@ -1,10 +1,10 @@
 <html>
   <head>
-    <title>Parameter Test with Decryption</title>
+    <title>Decryption Test</title>
   </head>
   <body>
-    <h2>HTA Parameter Test with Decryption</h2>
-    <p>Checking and decrypting provided URL...</p>
+    <h2>HTA Decryption Example</h2>
+    <p>Decrypting the encrypted URL...</p>
   </body>
 
   <script language="VBScript">
@@ -35,16 +35,17 @@
       GetQueryParameter = ""
     End Function
 
-    ' Main function to display and decrypt the URL
+    ' Main function to decrypt and display the URL
     Sub DecryptAndDisplayURL()
       Dim encryptedURL, decryptedURL, key
-      encryptedURL = GetQueryParameter("downloadUrl")
-      key = GetQueryParameter("key")
+      ' Encrypted URL is hardcoded in the script
+      encryptedURL = "aHR0cHM6Ly9leGFtcGxlLmNvbS9maWxlLXRvLWRvd25sb2Fk" ' Base64 encoded URL
+      key = GetQueryParameter("key") ' Retrieve the decryption key from the command line
 
-      If encryptedURL = "" Or key = "" Then
-        MsgBox "No download URL or key provided!", vbCritical
+      If key = "" Then
+        MsgBox "No decryption key provided!", vbCritical
       Else
-        ' Decrypt the URL (Base64 decode)
+        ' Decrypt the URL (Base64 decode in this example)
         decryptedURL = Base64Decode(encryptedURL)
 
         ' Display the decrypted URL
