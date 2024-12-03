@@ -1,13 +1,24 @@
 <html>
   <head>
-    <title>Parameter Test</title>
+    <title>Parameter Test with Decryption</title>
   </head>
   <body>
-    <h2>HTA Parameter Test</h2>
-    <p>Checking provided URL...</p>
+    <h2>HTA Parameter Test with Decryption</h2>
+    <p>Checking and decrypting provided URL...</p>
   </body>
 
   <script language="VBScript">
+    ' Function to decode Base64 (simple decryption example)
+    Function Base64Decode(strBase64)
+      Dim xml, node
+      Set xml = CreateObject("MSXML2.DOMDocument")
+      Set node = xml.CreateElement("tmp")
+      node.DataType = "bin.base64"
+      node.Text = strBase64
+      Base64Decode = node.nodeTypedValue
+    End Function
+
+    ' Function to get query parameter from the URL
     Function GetQueryParameter(paramName)
       Dim query, params, i, param, nameValue
       query = Window.Location.search
@@ -24,18 +35,24 @@
       GetQueryParameter = ""
     End Function
 
-    Sub DisplayURL()
-      Dim downloadUrl
-      downloadUrl = GetQueryParameter("downloadUrl")
+    ' Main function to display and decrypt the URL
+    Sub DecryptAndDisplayURL()
+      Dim encryptedURL, decryptedURL, key
+      encryptedURL = GetQueryParameter("downloadUrl")
+      key = GetQueryParameter("key")
 
-      If downloadUrl = "" Then
-        MsgBox "No download URL provided!", vbCritical
+      If encryptedURL = "" Or key = "" Then
+        MsgBox "No download URL or key provided!", vbCritical
       Else
-        MsgBox "The provided URL is: " & downloadUrl, vbInformation
+        ' Decrypt the URL (Base64 decode)
+        decryptedURL = Base64Decode(encryptedURL)
+
+        ' Display the decrypted URL
+        MsgBox "The decrypted URL is: " & decryptedURL, vbInformation
       End If
     End Sub
 
-    ' Call the function to display the URL
-    DisplayURL
+    ' Call the function to decrypt and display the URL
+    DecryptAndDisplayURL
   </script>
 </html>
